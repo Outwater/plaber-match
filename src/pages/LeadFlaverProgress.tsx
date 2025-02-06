@@ -205,13 +205,14 @@ const LeadFlaverProgress = () => {
                   </PrepItem>
                   <PrepItem>
                     <PrepIcon>🏟️</PrepIcon>
-                    <PrepLink 
+                    <PrepText>구장 상세 정보</PrepText>
+                    <ViewButton 
                       href="https://plabfootball.notion.site/1928d2532450803a9157cf2c71d92bc8"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      구장 상세 정보 보러가기
-                    </PrepLink>
+                      보러가기
+                    </ViewButton>
                   </PrepItem>
                 </PrepList>
               </PrepSection>
@@ -587,14 +588,19 @@ const ReassignButton = styled.button`
   }
 `;
 
-const PrepLink = styled.a`
-  font-size: 16px;
-  color: #333;
+const ViewButton = styled.a`
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #666;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
   text-decoration: none;
-  flex: 1;
+  margin-left: auto;
   
   &:hover {
-    text-decoration: underline;
+    background-color: #f8f9fa;
   }
 `;
 

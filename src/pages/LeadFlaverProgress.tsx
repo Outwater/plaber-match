@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -12,10 +12,25 @@ interface TeamAssignment {
   players: string[];
 }
 
+interface MatchInfo {
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  participants: number;
+}
+
 const LeadFlaverProgress = () => {
   const { matchId } = useParams();
   const navigate = useNavigate();
   const [showRotationManual, setShowRotationManual] = useState(false);
+  const [matchInfo, setMatchInfo] = useState<MatchInfo>({
+    title: '플래버 매치',
+    date: '2024-03-22',
+    time: '21:00',
+    location: '홍대 풋살장',
+    participants: 12
+  });
 
   const emergencyGuides: EmergencyGuide[] = [
     {
@@ -42,6 +57,16 @@ const LeadFlaverProgress = () => {
 
   return (
     <Container>
+      <MatchInfoSection>
+        <MatchTitle>{matchInfo.title}</MatchTitle>
+        <MatchDetails>
+          <DetailItem>📅 {matchInfo.date}</DetailItem>
+          <DetailItem>⏰ {matchInfo.time}</DetailItem>
+          <DetailItem>📍 {matchInfo.location}</DetailItem>
+          <DetailItem>👥 {matchInfo.participants}명</DetailItem>
+        </MatchDetails>
+      </MatchInfoSection>
+
       <Section>
         <h2>긴급 가이드</h2>
         <GuideList>
@@ -162,4 +187,29 @@ const EndMatchButton = styled.button`
   &:hover {
     background-color: #c82333;
   }
+`;
+
+const MatchInfoSection = styled.div`
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+`;
+
+const MatchTitle = styled.h1`
+  font-size: 24px;
+  margin: 0 0 15px 0;
+`;
+
+const MatchDetails = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+`;
+
+const DetailItem = styled.span`
+  background-color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 14px;
 `; 

@@ -42,7 +42,7 @@ const MatchList = () => {
   ]);
 
   const handleMatchClick = (matchId: string) => {
-    navigate(`/matches/${matchId}`);
+    navigate(`/matches/${matchId}/lead-flaver`);
   };
 
   return (

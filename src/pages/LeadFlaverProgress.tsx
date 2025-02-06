@@ -20,8 +20,6 @@ interface VenueInfo {
 }
 
 const LeadFlaverProgress = () => {
-  const { matchId } = useParams();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'match' | 'emergency'>('match');
   
   const [matchInfo] = useState<MatchInfo>({

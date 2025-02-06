@@ -38,6 +38,31 @@ const MatchComplete = () => {
     return () => clearInterval(timer);
   }, [matchId]);
 
+  useEffect(() => {
+    // API로부터 리드 플래버 데이터 로드
+    const fetchLeadFlavers = async () => {
+      // TODO: 실제 API 호출로 대체
+      const mockData: LeadFlaver[] = [];
+      setLeadFlavers(mockData);
+    };
+    
+    fetchLeadFlavers();
+  }, []);
+
+  useEffect(() => {
+    const fetchTeamData = async () => {
+      // TODO: 실제 API 호출로 대체
+      const mockTeam: Team = {
+        id: '1',
+        name: '팀A',
+        players: ['플레이어1', '플레이어2']
+      };
+      setMyTeam(mockTeam);
+    };
+    
+    fetchTeamData();
+  }, []);
+
   const handleLeadFlaverApply = async () => {
     if (leadFlavers.length >= 2) {
       alert('이미 리드 플래버가 모두 배정되었습니다.');

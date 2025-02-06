@@ -219,7 +219,10 @@ const LeadFlaverProgress = () => {
               <PrepSection>
                 <PrepTitleContainer>
                   <PrepSubTitle>• 팀 정보</PrepSubTitle>
-                  <ReassignButton onClick={handleTeamReassign}>팀 재배정</ReassignButton>
+                  <ButtonGroup>
+                    <ReassignButton onClick={handleTeamReassign}>팀 재배정</ReassignButton>
+                    <RotationButton>🔄 로테이션</RotationButton>
+                  </ButtonGroup>
                 </PrepTitleContainer>
                 <TeamGrid>
                   {teamAssignments.map((team, index) => (
@@ -732,6 +735,26 @@ const Divider = styled.hr`
   margin: 0 auto 30px;
   width: 100%;
   max-width: 1160px;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const RotationButton = styled.button`
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #666;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
 `;
 
 export default LeadFlaverProgress;

@@ -8,9 +8,11 @@ interface MatchInfo {
   participants: number;
 }
 
+type Level = '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5';
+
 interface Player {
   name: string;
-  level: string;
+  level: Level;
 }
 
 interface TeamAssignment {
@@ -21,6 +23,18 @@ interface TeamAssignment {
 interface VenueInfo {
   equipment: string;
   lighting: string;
+}
+
+interface MatchReport {
+  matchProgress: string;
+  issues: string;
+  playerFeedback: string;
+}
+
+interface EmergencyItem {
+  title: string;
+  content: string;
+  emoji: string;
 }
 
 const LeadFlaverProgress = () => {
@@ -38,12 +52,19 @@ const LeadFlaverProgress = () => {
     lighting: '조명 스위치: 구장 입구 좌측 벽면'
   });
 
-  const getRandomLevel = () => {
-    const levels = ['아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5'];
-    return levels[Math.floor(Math.random() * levels.length)];
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [matchReport, setMatchReport] = useState<MatchReport>({
+    matchProgress: '',
+    issues: '',
+    playerFeedback: ''
+  });
+
+  const getRandomLevel = (): Level => {
+    const levels: Level[] = ['아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5'];
+    return levels[Math.floor(Math.random() * levels.length)] as Level;
   };
 
-  const [teamAssignments] = useState<TeamAssignment[]>([
+  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([
     {
       teamName: '블루팀',
       players: Array(6).fill(null).map((_, i) => ({
@@ -60,24 +81,11 @@ const LeadFlaverProgress = () => {
     }
   ]);
 
-  const calculateTeamStrength = (players: Player[]) => {
-    const levelToScore = {
-      '아마추어1': 1,
-      '아마추어2': 2,
-      '아마추어3': 3,
-      '아마추어4': 4,
-      '아마추어5': 5
-    };
-    return players.reduce((sum, player) => sum + levelToScore[player.level], 0);
-  };
-
   const handleTeamReassign = () => {
-    // 모든 플레이어를 하나의 배열로 합치기
     const allPlayers = [...teamAssignments[0].players, ...teamAssignments[1].players];
     
-    // 레벨 기준으로 플레이어 정렬 (높은 레벨부터)
     allPlayers.sort((a, b) => {
-      const levelToScore = {
+      const levelToScore: Record<Level, number> = {
         '아마추어1': 1,
         '아마추어2': 2,
         '아마추어3': 3,
@@ -90,7 +98,6 @@ const LeadFlaverProgress = () => {
     const team1: Player[] = [];
     const team2: Player[] = [];
 
-    // 지그재그로 플레이어 분배하여 레벨 균형 맞추기
     allPlayers.forEach((player, index) => {
       if (index % 2 === 0) {
         team1.push(player);
@@ -99,7 +106,6 @@ const LeadFlaverProgress = () => {
       }
     });
 
-    // 새로운 팀 배정으로 상태 업데이트
     setTeamAssignments([
       { teamName: '블루팀', players: team1 },
       { teamName: '레드팀', players: team2 }
@@ -109,6 +115,53 @@ const LeadFlaverProgress = () => {
   const handleMatchStart = () => {
     window.location.href = 'https://plab-design.vercel.app/project/match-assistant';
   };
+
+  const handleEndMatch = () => {
+    setShowReportModal(true);
+  };
+
+  const handleSubmitReport = () => {
+    // TODO: API로 리포트 전송
+    setShowReportModal(false);
+  };
+
+  const emergencyGuides: EmergencyItem[] = [
+    {
+      title: '플래버 지각, 불참했어요',
+      content: '',
+      emoji: '😰'
+    },
+    {
+      title: '구장 정보가 달라요 (조명, 장비 등)',
+      content: '',
+      emoji: '❗'
+    },
+    {
+      title: '지각자가 너무 많아요',
+      content: '',
+      emoji: '😥'
+    },
+    {
+      title: '비, 눈이 올 때 진행하나요?',
+      content: '',
+      emoji: '☔'
+    },
+    {
+      title: '부상자가 발생했어요',
+      content: '',
+      emoji: '🤕'
+    },
+    {
+      title: '매치 중 다툼이 일어났어요',
+      content: '',
+      emoji: '😠'
+    },
+    {
+      title: '담당 매치에 늦을 것 같아요',
+      content: '',
+      emoji: '😱'
+    }
+  ];
 
   return (
     <Container>
@@ -155,6 +208,16 @@ const LeadFlaverProgress = () => {
                     <PrepIcon>💡</PrepIcon>
                     <PrepText>{venueInfo.lighting}</PrepText>
                   </PrepItem>
+                  <PrepItem>
+                    <PrepIcon>🏟️</PrepIcon>
+                    <PrepLink 
+                      href="https://plabfootball.notion.site/1928d2532450803a9157cf2c71d92bc8"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      구장 상세 정보 보러가기
+                    </PrepLink>
+                  </PrepItem>
                 </PrepList>
               </PrepSection>
 
@@ -187,12 +250,78 @@ const LeadFlaverProgress = () => {
             <StartMatchButton onClick={handleMatchStart}>
               매치 시작하기
             </StartMatchButton>
+            <EndMatchButton onClick={handleEndMatch}>
+              매치 종료하기
+            </EndMatchButton>
           </Section>
         </>
       ) : (
         <EmergencyGuide>
-          {/* 긴급 가이드 내용 */}
+          <GuideList>
+            {emergencyGuides.map((guide, index) => (
+              <GuideItem key={index}>
+                <GuideHeader>
+                  <GuideTitle>{guide.title}</GuideTitle>
+                  <GuideEmoji>{guide.emoji}</GuideEmoji>
+                </GuideHeader>
+                <GuideContent>{guide.content}</GuideContent>
+              </GuideItem>
+            ))}
+          </GuideList>
         </EmergencyGuide>
+      )}
+
+      {showReportModal && (
+        <ModalOverlay>
+          <ModalContent>
+            <ModalHeader>
+              <h2>매치 리포트</h2>
+              <CloseButton onClick={() => setShowReportModal(false)}>✕</CloseButton>
+            </ModalHeader>
+            
+            <ModalBody>
+              <ReportSection>
+                <ReportLabel>매치 진행 사항</ReportLabel>
+                <ReportTextarea
+                  value={matchReport.matchProgress}
+                  onChange={(e) => setMatchReport({
+                    ...matchReport,
+                    matchProgress: e.target.value
+                  })}
+                  placeholder="매치는 어떻게 진행되었나요?"
+                />
+              </ReportSection>
+
+              <ReportSection>
+                <ReportLabel>특이사항</ReportLabel>
+                <ReportTextarea
+                  value={matchReport.issues}
+                  onChange={(e) => setMatchReport({
+                    ...matchReport,
+                    issues: e.target.value
+                  })}
+                  placeholder="특이사항이 있었나요?"
+                />
+              </ReportSection>
+
+              <ReportSection>
+                <ReportLabel>플레이어 피드백</ReportLabel>
+                <ReportTextarea
+                  value={matchReport.playerFeedback}
+                  onChange={(e) => setMatchReport({
+                    ...matchReport,
+                    playerFeedback: e.target.value
+                  })}
+                  placeholder="플레이어들의 피드백을 입력해주세요"
+                />
+              </ReportSection>
+            </ModalBody>
+
+            <ModalFooter>
+              <SubmitButton onClick={handleSubmitReport}>리포트 제출</SubmitButton>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
       )}
     </Container>
   );
@@ -209,11 +338,15 @@ const TabContainer = styled.div`
   gap: 10px;
   margin-bottom: 30px;
   width: 100%;
+  max-width: 520px;
+  margin: 0 auto 30px;
+  padding: 0;
 `;
 
 const Tab = styled.button<{ active: boolean }>`
   flex: 1;
-  padding: 15px 30px;
+  min-width: 280px;
+  padding: 20px 40px;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -311,14 +444,85 @@ const StartMatchButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 10px;
 
   &:hover {
     background-color: #218838;
   }
 `;
 
+const EndMatchButton = styled.button`
+  width: 100%;
+  padding: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #c82333;
+  }
+`;
+
 const EmergencyGuide = styled.div`
-  // 긴급 가이드 스타일
+  padding: 0;
+  max-width: 520px;
+  margin: 0 auto;
+`;
+
+const GuideList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+`;
+
+const GuideItem = styled.div`
+  background-color: #f8f9fa;
+  padding: 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const GuideHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+`;
+
+const GuideTitle = styled.h3`
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  flex: 1;
+`;
+
+const GuideEmoji = styled.span`
+  font-size: 28px;
+  margin-left: 20px;
+`;
+
+const GuideContent = styled.p`
+  visibility: hidden;
+  height: 0;
+  margin: 0;
 `;
 
 const PlayerCount = styled.div`
@@ -388,4 +592,104 @@ const ReassignButton = styled.button`
   }
 `;
 
-export default LeadFlaverProgress; 
+const PrepLink = styled.a`
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  flex: 1;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+`;
+
+const ModalHeader = styled.div`
+  padding: 20px;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  
+  &:hover {
+    color: #333;
+  }
+`;
+
+const ModalBody = styled.div`
+  padding: 20px;
+`;
+
+const ModalFooter = styled.div`
+  padding: 20px;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const ReportSection = styled.div`
+  margin-bottom: 20px;
+`;
+
+const ReportLabel = styled.div`
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const ReportTextarea = styled.textarea`
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  resize: vertical;
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+export default LeadFlaverProgress;

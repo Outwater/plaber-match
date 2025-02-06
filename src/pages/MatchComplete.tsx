@@ -17,9 +17,15 @@ interface Team {
 
 const MatchComplete = () => {
   const { matchId } = useParams();
-  const [leadFlavers, setLeadFlavers] = useState<LeadFlaver[]>([]);
-  const [myTeam, setMyTeam] = useState<Team | null>(null);
   const [showTeam, setShowTeam] = useState(false);
+
+  const leadFlavers: LeadFlaver[] = [];  // 빈 배열로 초기화
+
+  const myTeam: Team = {
+    id: '1',
+    name: '팀A',
+    players: ['플레이어1', '플레이어2']
+  };
 
   useEffect(() => {
     // 매치 시작 5분 전인지 체크
@@ -37,31 +43,6 @@ const MatchComplete = () => {
     const timer = setInterval(checkMatchTime, 30000); // 30초마다 체크
     return () => clearInterval(timer);
   }, [matchId]);
-
-  useEffect(() => {
-    // API로부터 리드 플래버 데이터 로드
-    const fetchLeadFlavers = async () => {
-      // TODO: 실제 API 호출로 대체
-      const mockData: LeadFlaver[] = [];
-      setLeadFlavers(mockData);
-    };
-    
-    fetchLeadFlavers();
-  }, []);
-
-  useEffect(() => {
-    const fetchTeamData = async () => {
-      // TODO: 실제 API 호출로 대체
-      const mockTeam: Team = {
-        id: '1',
-        name: '팀A',
-        players: ['플레이어1', '플레이어2']
-      };
-      setMyTeam(mockTeam);
-    };
-    
-    fetchTeamData();
-  }, []);
 
   const handleLeadFlaverApply = async () => {
     if (leadFlavers.length >= 2) {

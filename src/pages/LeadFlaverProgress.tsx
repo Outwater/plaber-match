@@ -127,17 +127,17 @@ const LeadFlaverProgress = () => {
 
   const emergencyGuides: EmergencyItem[] = [
     {
-      title: '플래버 지각, 불참했어요',
+      title: '플래버가 지각했어요',
       content: '',
       emoji: '😰'
     },
     {
-      title: '구장 정보가 달라요 (조명, 장비 등)',
+      title: '플래버가 불참했어요',
       content: '',
       emoji: '❗'
     },
     {
-      title: '지각자가 너무 많아요',
+      title: '구장에 문제가 발생했어요(조명, 장비 등)',
       content: '',
       emoji: '😥'
     },
@@ -155,11 +155,6 @@ const LeadFlaverProgress = () => {
       title: '매치 중 다툼이 일어났어요',
       content: '',
       emoji: '😠'
-    },
-    {
-      title: '담당 매치에 늦을 것 같아요',
-      content: '',
-      emoji: '😱'
     }
   ];
 

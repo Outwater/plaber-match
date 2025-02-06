@@ -20,11 +20,6 @@ interface TeamAssignment {
   players: Player[];
 }
 
-interface VenueInfo {
-  equipment: string;
-  lighting: string;
-}
-
 interface MatchReport {
   matchProgress: string;
   issues: string;
@@ -43,13 +38,8 @@ const LeadFlaverProgress = () => {
   const [matchInfo] = useState<MatchInfo>({
     date: '2024-03-22',
     time: '21:00',
-    location: '홍대 풋살장',
+    location: '플랩 스타디움 가산 마리오',
     participants: 18
-  });
-
-  const [venueInfo] = useState<VenueInfo>({
-    equipment: '조끼/공 보관함 위치: 출입구 우측 사물함',
-    lighting: '조명 스위치: 구장 입구 좌측 벽면'
   });
 
   const [showReportModal, setShowReportModal] = useState(false);
@@ -174,6 +164,7 @@ const LeadFlaverProgress = () => {
 
   return (
     <Container>
+      <PageTitle>PLABER MATCH</PageTitle>
       <TabContainer>
         <Tab 
           active={activeTab === 'match'} 
@@ -188,6 +179,7 @@ const LeadFlaverProgress = () => {
           긴급 가이드
         </Tab>
       </TabContainer>
+      <Divider />
 
       {activeTab === 'match' ? (
         <>
@@ -202,6 +194,7 @@ const LeadFlaverProgress = () => {
               </InfoList>
             </InfoBox>
           </Section>
+          <Divider />
 
           <Section>
             <SectionTitle>매치 준비하기</SectionTitle>
@@ -210,18 +203,10 @@ const LeadFlaverProgress = () => {
                 <PrepSubTitle>• 구장 정보</PrepSubTitle>
                 <PrepList>
                   <PrepItem>
-                    <PrepIcon>🎽</PrepIcon>
-                    <PrepText>{venueInfo.equipment}</PrepText>
-                  </PrepItem>
-                  <PrepItem>
-                    <PrepIcon>💡</PrepIcon>
-                    <PrepText>{venueInfo.lighting}</PrepText>
-                  </PrepItem>
-                  <PrepItem>
                     <PrepIcon>🏟️</PrepIcon>
                     <PrepText>구장 상세 정보</PrepText>
                     <ViewButton 
-                      href="https://plabfootball.notion.site/1928d2532450803a9157cf2c71d92bc8"
+                      href="https://plabfootball.notion.site/a29919ddda28405aabc434dc98afa703?pvs=4"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -238,9 +223,13 @@ const LeadFlaverProgress = () => {
                 </PrepTitleContainer>
                 <TeamGrid>
                   {teamAssignments.map((team, index) => (
-                    <TeamCard key={index}>
-                      <TeamTitle isBlue={index === 0}>{team.teamName}</TeamTitle>
-                      <PlayerCount>{team.players.length}명</PlayerCount>
+                    <TeamCard key={index} isBlue={index === 0}>
+                      <TeamTitleContainer>
+                        <TeamTitle isBlue={index === 0}>
+                          {team.teamName}
+                        </TeamTitle>
+                        <PlayerCount>{team.players.length}명</PlayerCount>
+                      </TeamTitleContainer>
                       <PlayerList>
                         {team.players.map((player, idx) => (
                           <PlayerItem key={idx}>
@@ -255,6 +244,7 @@ const LeadFlaverProgress = () => {
               </PrepSection>
             </PrepContainer>
           </Section>
+          <Divider />
 
           <Section>
             <StartMatchButton onClick={handleMatchStart}>
@@ -343,6 +333,20 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
+const PageTitle = styled.h1`
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+  max-width: 520px;
+  padding: 15px 20px;
+  margin: 0 auto 30px;
+  margin-left: 20px;
+  background-color: #1E2B5E;
+  border-radius: 8px;
+`;
+
 const TabContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -351,6 +355,8 @@ const TabContainer = styled.div`
   max-width: 520px;
   margin: 0 auto 30px;
   padding: 0;
+  margin-left: 20px;
+  margin-right: auto;
 `;
 
 const Tab = styled.button<{ active: boolean }>`
@@ -361,12 +367,12 @@ const Tab = styled.button<{ active: boolean }>`
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  background-color: ${props => props.active ? '#007bff' : '#f8f9fa'};
+  background-color: ${props => props.active ? '#1E2B5E' : '#f8f9fa'};
   color: ${props => props.active ? 'white' : '#333'};
   transition: all 0.2s;
 
   &:hover {
-    background-color: ${props => props.active ? '#0056b3' : '#e9ecef'};
+    background-color: ${props => props.active ? '#162044' : '#e9ecef'};
   }
 `;
 
@@ -410,10 +416,21 @@ const TeamCard = styled.div`
   border-radius: 8px;
 `;
 
+const TeamTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+`;
+
 const TeamTitle = styled.h3<{ isBlue: boolean }>`
-  margin: 0 0 15px 0;
+  margin: 0;
   font-size: 20px;
-  color: ${props => props.isBlue ? '#007bff' : '#dc3545'};
+  color: white;
+  background-color: ${props => props.isBlue ? '#1E2B5E' : '#B23A48'};
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: inline-block;
 `;
 
 const PlayerList = styled.ul`
@@ -436,6 +453,7 @@ const PlayerItem = styled.li`
 
 const PlayerName = styled.span`
   font-size: 16px;
+  color: #333;
 `;
 
 const PlayerLevel = styled.span`
@@ -449,7 +467,7 @@ const StartMatchButton = styled.button`
   font-size: 24px;
   font-weight: bold;
   color: white;
-  background-color: #007bff;
+  background-color: #1E2B5E;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -457,7 +475,7 @@ const StartMatchButton = styled.button`
   margin-bottom: 10px;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #162044;
   }
 `;
 
@@ -467,14 +485,14 @@ const EndMatchButton = styled.button`
   font-size: 24px;
   font-weight: bold;
   color: white;
-  background-color: #dc3545;
+  background-color: #B23A48;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #c82333;
+    background-color: #8E2E3A;
   }
 `;
 
@@ -537,7 +555,8 @@ const GuideContent = styled.p`
 
 const PlayerCount = styled.div`
   color: #666;
-  margin-bottom: 10px;
+  font-size: 16px;
+  padding: 8px 0;
 `;
 
 const PrepContainer = styled.div`
@@ -696,15 +715,23 @@ const ReportTextarea = styled.textarea`
 
 const SubmitButton = styled.button`
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #1E2B5E;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   
   &:hover {
-    background-color: #0056b3;
+    background-color: #162044;
   }
+`;
+
+const Divider = styled.hr`
+  border: none;
+  border-top: 1px solid #dee2e6;
+  margin: 0 auto 30px;
+  width: 100%;
+  max-width: 1160px;
 `;
 
 export default LeadFlaverProgress;

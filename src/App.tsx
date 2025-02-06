@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         {/* 홈화면에서 MatchList 표시 */}
-        <Route path="/" element={<MatchList />} />
+        <Route path="/" element={<LeadFlaverProgress />} />
         
         {/* 매치 리스트 페이지 */}
         <Route path="/matches" element={<MatchList />} />

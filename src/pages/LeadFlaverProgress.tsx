@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-interface EmergencyGuide {
-  title: string;
-  content: string;
+interface MatchInfo {
+  date: string;
+  time: string;
+  location: string;
+  participants: number;
 }
 
 interface TeamAssignment {
@@ -12,134 +14,175 @@ interface TeamAssignment {
   players: string[];
 }
 
-interface MatchInfo {
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  participants: number;
+interface VenueInfo {
+  equipment: string;
+  lighting: string;
 }
 
 const LeadFlaverProgress = () => {
   const { matchId } = useParams();
   const navigate = useNavigate();
-  const [showRotationManual, setShowRotationManual] = useState(false);
-  const [matchInfo, setMatchInfo] = useState<MatchInfo>({
-    title: '플래버 매치',
+  const [activeTab, setActiveTab] = useState<'match' | 'emergency'>('match');
+  
+  const [matchInfo] = useState<MatchInfo>({
     date: '2024-03-22',
     time: '21:00',
     location: '홍대 풋살장',
     participants: 12
   });
 
-  const emergencyGuides: EmergencyGuide[] = [
-    {
-      title: '플래버 지각/불참 시',
-      content: '매치 시작 15분 전까지 연락이 되지 않는 경우, 운영팀에 즉시 연락해주세요.'
-    },
-    {
-      title: '구장 시설 안내',
-      content: '조명 스위치 위치: 출입구 우측, 장비보관함: 화장실 옆'
-    }
-  ];
+  const [venueInfo] = useState<VenueInfo>({
+    equipment: '조끼/공 보관함 위치: 출입구 우측 사물함',
+    lighting: '조명 스위치: 구장 입구 좌측 벽면'
+  });
 
-  const teamAssignments: TeamAssignment[] = [
-    { teamName: 'A팀', players: ['플레이어1', '플레이어2'] },
-    { teamName: 'B팀', players: ['플레이어3', '플레이어4'] }
-  ];
+  const [teamAssignments] = useState<TeamAssignment[]>([
+    { teamName: 'A팀', players: ['플레이어1', '플레이어2', '플레이어3'] },
+    { teamName: 'B팀', players: ['플레이어4', '플레이어5', '플레이어6'] }
+  ]);
 
-  const handleMatchEnd = async () => {
-    if (window.confirm('매치를 종료하시겠습니까?')) {
-      // 매치 종료 API 호출
-      navigate(`/matches/${matchId}/report`); // 특이사항 작성 페이지로 이동
-    }
+  const handleMatchStart = () => {
+    window.location.href = 'https://plab-design.vercel.app/project/match-assistant';
   };
 
   return (
     <Container>
-      <MatchInfoSection>
-        <MatchTitle>{matchInfo.title}</MatchTitle>
-        <MatchDetails>
-          <DetailItem>📅 {matchInfo.date}</DetailItem>
-          <DetailItem>⏰ {matchInfo.time}</DetailItem>
-          <DetailItem>📍 {matchInfo.location}</DetailItem>
-          <DetailItem>👥 {matchInfo.participants}명</DetailItem>
-        </MatchDetails>
-      </MatchInfoSection>
-
-      <Section>
-        <h2>긴급 가이드</h2>
-        <GuideList>
-          {emergencyGuides.map((guide, index) => (
-            <GuideItem key={index}>
-              <h3>{guide.title}</h3>
-              <p>{guide.content}</p>
-            </GuideItem>
-          ))}
-        </GuideList>
-      </Section>
-
-      <Section>
-        <h2>팀 배정</h2>
-        <TeamGrid>
-          {teamAssignments.map((team, index) => (
-            <TeamCard key={index}>
-              <h3>{team.teamName}</h3>
-              <PlayerList>
-                {team.players.map((player, idx) => (
-                  <li key={idx}>{player}</li>
-                ))}
-              </PlayerList>
-            </TeamCard>
-          ))}
-        </TeamGrid>
-      </Section>
-
-      <Section>
-        <h2>매치 어시스턴트</h2>
-        <AssistantButton 
-          onClick={() => setShowRotationManual(!showRotationManual)}
+      <TabContainer>
+        <Tab 
+          active={activeTab === 'match'} 
+          onClick={() => setActiveTab('match')}
         >
-          로테이션 메뉴얼 {showRotationManual ? '닫기' : '보기'}
-        </AssistantButton>
-        {showRotationManual && (
-          <RotationManual>
-            {/* 로테이션 메뉴얼 내용 */}
-          </RotationManual>
-        )}
-      </Section>
+          매치 진행
+        </Tab>
+        <Tab 
+          active={activeTab === 'emergency'} 
+          onClick={() => setActiveTab('emergency')}
+        >
+          긴급 가이드
+        </Tab>
+      </TabContainer>
 
-      <EndMatchButton onClick={handleMatchEnd}>
-        매치 종료하기
-      </EndMatchButton>
+      {activeTab === 'match' ? (
+        <>
+          <Section>
+            <SectionTitle>매치 정보</SectionTitle>
+            <InfoGrid>
+              <InfoCard>
+                <h3>매치 정보</h3>
+                <InfoList>
+                  <InfoItem>📅 {matchInfo.date}</InfoItem>
+                  <InfoItem>⏰ {matchInfo.time}</InfoItem>
+                  <InfoItem>📍 {matchInfo.location}</InfoItem>
+                  <InfoItem>👥 {matchInfo.participants}명</InfoItem>
+                </InfoList>
+              </InfoCard>
+              <InfoCard>
+                <h3>구장 정보</h3>
+                <InfoList>
+                  <InfoItem>🎽 {venueInfo.equipment}</InfoItem>
+                  <InfoItem>💡 {venueInfo.lighting}</InfoItem>
+                </InfoList>
+              </InfoCard>
+            </InfoGrid>
+          </Section>
+
+          <Section>
+            <SectionTitle>매치 준비하기</SectionTitle>
+            <TeamGrid>
+              {teamAssignments.map((team, index) => (
+                <TeamCard key={index}>
+                  <TeamTitle>{team.teamName}</TeamTitle>
+                  <PlayerList>
+                    {team.players.map((player, idx) => (
+                      <PlayerItem key={idx}>{player}</PlayerItem>
+                    ))}
+                  </PlayerList>
+                </TeamCard>
+              ))}
+            </TeamGrid>
+          </Section>
+
+          <Section>
+            <StartMatchButton onClick={handleMatchStart}>
+              매치 시작하기
+            </StartMatchButton>
+          </Section>
+        </>
+      ) : (
+        <EmergencyGuide>
+          {/* 긴급 가이드 내용 */}
+        </EmergencyGuide>
+      )}
     </Container>
   );
 };
 
-export default LeadFlaverProgress;
-
 const Container = styled.div`
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
-const Section = styled.div`
+const TabContainer = styled.div`
+  display: flex;
+  gap: 10px;
   margin-bottom: 30px;
 `;
 
-const GuideList = styled.div`
+const Tab = styled.button<{ active: boolean }>`
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: ${props => props.active ? '#007bff' : '#f8f9fa'};
+  color: ${props => props.active ? 'white' : '#333'};
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: ${props => props.active ? '#0056b3' : '#e9ecef'};
+  }
+`;
+
+const Section = styled.section`
+  margin-bottom: 40px;
+`;
+
+const SectionTitle = styled.h2`
+  margin-bottom: 20px;
+  font-size: 24px;
+`;
+
+const InfoGrid = styled.div`
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 `;
 
-const GuideItem = styled.div`
+const InfoCard = styled.div`
   background-color: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
+  
+  h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+  }
+`;
+
+const InfoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const InfoItem = styled.div`
+  font-size: 16px;
 `;
 
 const TeamGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 `;
 
@@ -149,67 +192,46 @@ const TeamCard = styled.div`
   border-radius: 8px;
 `;
 
+const TeamTitle = styled.h3`
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  color: #007bff;
+`;
+
 const PlayerList = styled.ul`
   list-style: none;
   padding: 0;
+  margin: 0;
 `;
 
-const AssistantButton = styled.button`
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
+const PlayerItem = styled.li`
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
   
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const StartMatchButton = styled.button`
+  width: 100%;
+  padding: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
   &:hover {
     background-color: #218838;
   }
 `;
 
-const RotationManual = styled.div`
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+const EmergencyGuide = styled.div`
+  // 긴급 가이드 스타일
 `;
 
-const EndMatchButton = styled.button`
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 1.1em;
-  
-  &:hover {
-    background-color: #c82333;
-  }
-`;
-
-const MatchInfoSection = styled.div`
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-`;
-
-const MatchTitle = styled.h1`
-  font-size: 24px;
-  margin: 0 0 15px 0;
-`;
-
-const MatchDetails = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-`;
-
-const DetailItem = styled.span`
-  background-color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 14px;
-`; 
+export default LeadFlaverProgress; 

@@ -435,7 +435,7 @@ const StartMatchButton = styled.button`
   font-size: 24px;
   font-weight: bold;
   color: white;
-  background-color: #28a745;
+  background-color: #007bff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -443,7 +443,7 @@ const StartMatchButton = styled.button`
   margin-bottom: 10px;
 
   &:hover {
-    background-color: #218838;
+    background-color: #0056b3;
   }
 `;
 

@@ -220,7 +220,7 @@ const LeadFlaverProgress = () => {
                 <PrepTitleContainer>
                   <PrepSubTitle>• 팀 정보</PrepSubTitle>
                   <ButtonGroup>
-                    <RotationButton>🔄 로테이션</RotationButton>
+                    <RotationButton>로테이션 표</RotationButton>
                     <ReassignButton onClick={handleTeamReassign}>팀 재배정</ReassignButton>
                   </ButtonGroup>
                 </PrepTitleContainer>

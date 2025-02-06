@@ -68,14 +68,28 @@ const LeadFlaverProgress = () => {
     {
       teamName: '블루팀',
       players: Array(6).fill(null).map((_, i) => ({
-        name: `플레이어${i + 1}`,
+        name: [
+          '최무치',
+          '이옐로',
+          '허라미',
+          '서히로',
+          '차피치',
+          '반젠느'
+        ][i],
         level: getRandomLevel()
       }))
     },
     {
       teamName: '레드팀',
       players: Array(6).fill(null).map((_, i) => ({
-        name: `플레이어${i + 7}`,
+        name: [
+          '이미누',
+          '박피르',
+          '김건누',
+          '도엔도',
+          '뮤조커',
+          '임쵸비'
+        ][i],
         level: getRandomLevel()
       }))
     }

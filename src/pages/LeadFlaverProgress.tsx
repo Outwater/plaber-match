@@ -55,7 +55,7 @@ const LeadFlaverProgress = () => {
       </Section>
 
       <Section>
-        <h2>팀 배정 현황</h2>
+        <h2>팀 배정</h2>
         <TeamGrid>
           {teamAssignments.map((team, index) => (
             <TeamCard key={index}>

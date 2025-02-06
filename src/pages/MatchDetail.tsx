@@ -11,15 +11,19 @@ const MatchDetail = () => {
     checkLeadFlaverAssignment();
   }, [matchId]);
 
-  const checkLeadFlaverAssignment = () => {
-    // API 호출하여 리드 플래버 배정 여부 확인
+  const checkLeadFlaverAssignment = async () => {
+    // TODO: API 호출하여 리드 플래버 배정 여부 확인
+    const mockAssigned = false; // API 응답 대체
+    setHasLeadFlaver(mockAssigned);
   };
 
   return (
     <Container>
-      <WarningBanner>
-        ⚠️ 리드 플래버 미배정 시 매치가 자동으로 취소됩니다.
-      </WarningBanner>
+      {!hasLeadFlaver && (
+        <WarningBanner>
+          ⚠️ 리드 플래버 미배정 시 매치가 자동으로 취소됩니다.
+        </WarningBanner>
+      )}
       
       <Section>
         <h2>플래버 매치 특징</h2>

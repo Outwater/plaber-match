@@ -374,6 +374,7 @@ const Container = styled.div`
   padding: 20px;
   max-width: 475px;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const PageTitle = styled.h1`

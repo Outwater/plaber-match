@@ -283,12 +283,12 @@ const LeadPlaberProgress = () => {
             </NewContainer>
             <SubText>매치 어시스턴스가 로테이션 및 진행을 도와줄거에요.</SubText>
             <ButtonGroup>
-              <EndMatchButton onClick={handleEndMatch}>
-                매치 종료하기
-              </EndMatchButton>
               <StartMatchButton onClick={handleMatchStart}>
                 매치 시작하기
               </StartMatchButton>
+              <EndMatchButton onClick={handleEndMatch}>
+                매치 종료하기
+              </EndMatchButton>
             </ButtonGroup>
           </ButtonSection>
         </>
@@ -549,7 +549,7 @@ const ButtonGroup = styled.div`
 
 const StartMatchButton = styled.button`
   box-sizing: border-box;
-  flex: 7; // 7:3 비율
+  flex: 7; // 다시 7:3 비율로 변경
   padding: 16px;
   font-size: 18px;
   font-weight: bold;
@@ -567,7 +567,7 @@ const StartMatchButton = styled.button`
 
 const EndMatchButton = styled.button`
   box-sizing: border-box;
-  flex: 3; // 7:3 비율
+  flex: 3; // 다시 7:3 비율로 변경
   padding: 16px;
   font-size: 18px;
   font-weight: bold;
@@ -842,7 +842,7 @@ const ContentText = styled.div`
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 22px;
 `;
 

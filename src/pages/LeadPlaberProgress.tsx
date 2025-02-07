@@ -10,7 +10,7 @@ interface MatchInfo {
   participants: number;
 }
 
-type Level = '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5';
+type Level = '세미프로1' | '세미프로2' | '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5';
 
 interface Player {
   name: string;
@@ -63,7 +63,7 @@ const LeadPlaberProgress = () => {
   });
 
   const getRandomLevel = (): Level => {
-    const levels: Level[] = ['아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5'];
+    const levels: Level[] = ['세미프로1', '세미프로2', '아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5'];
     return levels[Math.floor(Math.random() * levels.length)] as Level;
   };
 
@@ -103,11 +103,13 @@ const LeadPlaberProgress = () => {
     
     allPlayers.sort((a, b) => {
       const levelToScore: Record<Level, number> = {
-        '아마추어1': 1,
-        '아마추어2': 2,
+        '세미프로1': 7,
+        '세미프로2': 6,
+        '아마추어1': 5,
+        '아마추어2': 4,
         '아마추어3': 3,
-        '아마추어4': 4,
-        '아마추어5': 5
+        '아마추어4': 2,
+        '아마추어5': 1
       };
       return levelToScore[b.level] - levelToScore[a.level];
     });

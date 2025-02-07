@@ -423,11 +423,6 @@ const Section = styled.section`
   width: 100%;
 `;
 
-const SectionTitle = styled.h2`
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-align: left;
-`;
 
 const InfoBox = styled.div`
   display: flex;
@@ -655,12 +650,6 @@ const PrepSection = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 5px;
-`;
-
-const PrepSubTitle = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0;
 `;
 
 const PrepList = styled.div`

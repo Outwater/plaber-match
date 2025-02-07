@@ -290,7 +290,7 @@ const LeadPlaberProgress = () => {
                 매치 시작하기
               </StartMatchButton>
               <EndMatchButton onClick={handleEndMatch}>
-                매치 종료하기
+                종료하기
               </EndMatchButton>
             </ButtonGroup>
           </ButtonSection>
@@ -822,7 +822,7 @@ const RotationButton = styled.button`
   cursor: pointer;
   transition: all 0.2s;
   font-family: Pretendard;
-  
+
   &:hover {
     background-color: #f8f9fa;
   }

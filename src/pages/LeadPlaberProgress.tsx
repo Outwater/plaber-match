@@ -730,10 +730,10 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div`
   background-color: white;
   border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
+  width: 400px;
   max-height: 90vh;
   overflow-y: auto;
+  margin: 0 auto;
 `;
 
 const ModalHeader = styled.div`
@@ -742,10 +742,13 @@ const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #282B33;
+  border-radius: 8px 8px 0 0;
 
   h2 {
     margin: 0;
     font-size: 20px;
+    color: white;
   }
 `;
 
@@ -754,15 +757,17 @@ const CloseButton = styled.button`
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #666;
+  color: white;
   
   &:hover {
-    color: #333;
+    color: #e0e0e0;
   }
 `;
 
 const ModalBody = styled.div`
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const ModalFooter = styled.div`
@@ -776,18 +781,28 @@ const ReportSection = styled.div`
   margin-bottom: 20px;
 `;
 
-const ReportLabel = styled.div`
-  font-weight: bold;
-  margin-bottom: 8px;
-`;
-
 const ReportTextarea = styled.textarea`
   width: 100%;
-  height: 100px;
+  height: 60px;
   padding: 10px;
   border: 1px solid #dee2e6;
   border-radius: 4px;
   resize: vertical;
+  color: #333;
+  font-size: 14px;
+  display: block;
+  margin: 0;
+  box-sizing: border-box;
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+const ReportLabel = styled.div`
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 16px;
 `;
 
 const SubmitButton = styled.button`
@@ -797,6 +812,8 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
   
   &:hover {
     background-color: #1259CC;

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import blueTeamVest from '../assets/blue_team_vest.svg';
+import redTeamVest from '../assets/red_team_vest.svg';
 
 interface MatchInfo {
   date: string;
@@ -32,7 +34,18 @@ interface EmergencyItem {
   emoji: string;
 }
 
-const LeadFlaverProgress = () => {
+const formatDate = (dateStr: string, timeStr: string) => {
+  const date = new Date(dateStr);
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  
+  const month = (date.getMonth() + 1).toString();
+  const day = date.getDate().toString();
+  const dayOfWeek = days[date.getDay()];
+  
+  return `${month}월 ${day}일 ${dayOfWeek}요일 ${timeStr}`;
+};
+
+const LeadPlaberProgress = () => {
   const [activeTab, setActiveTab] = useState<'match' | 'emergency'>('match');
   
   const [matchInfo] = useState<MatchInfo>({
@@ -162,6 +175,10 @@ const LeadFlaverProgress = () => {
     }
   ];
 
+  const handleRotation = () => {
+    window.open('https://www.notion.so/plabfootball/60-1928d253245080389904cf251c059ca6?pvs=4', '_blank');
+  };
+
   return (
     <Container>
       <PageTitle>PLABER MATCH</PageTitle>
@@ -179,32 +196,30 @@ const LeadFlaverProgress = () => {
           긴급 가이드
         </Tab>
       </TabContainer>
-      <Divider />
 
       {activeTab === 'match' ? (
         <>
-          <Section>
-            <SectionTitle>매치 정보</SectionTitle>
+          <Section style={{marginBottom: 20}}>
             <InfoBox>
-              <InfoList>
-                <InfoItem>📅 {matchInfo.date}</InfoItem>
-                <InfoItem>⏰ {matchInfo.time}</InfoItem>
-                <InfoItem>📍 {matchInfo.location}</InfoItem>
-                <InfoItem>👥 {matchInfo.participants}명</InfoItem>
-              </InfoList>
+              <InfoItem>{formatDate(matchInfo.date, matchInfo.time)}</InfoItem>
+              <InfoItem>{matchInfo.location}     12/{matchInfo.participants}명</InfoItem>
             </InfoBox>
           </Section>
           <Divider />
 
           <Section>
-            <SectionTitle>매치 준비하기</SectionTitle>
+            <NewContainer>
+              <Badge>Step1</Badge>
+              <ContentText>조끼와 공을 구장의 장비함에서 가져와주세요.</ContentText>
+            </NewContainer>
+            <SubText>장비함 위치는 아래 링크를 통해 확인할 수 있어요.</SubText>
+            
             <PrepContainer>
               <PrepSection>
-                <PrepSubTitle>• 구장 정보</PrepSubTitle>
                 <PrepList>
                   <PrepItem>
                     <PrepIcon>🏟️</PrepIcon>
-                    <PrepText>구장 상세 정보</PrepText>
+                    <PrepText>구장 장비 위치 및 특이사항</PrepText>
                     <ViewButton 
                       href="https://plabfootball.notion.site/a29919ddda28405aabc434dc98afa703?pvs=4"
                       target="_blank"
@@ -217,26 +232,38 @@ const LeadFlaverProgress = () => {
               </PrepSection>
 
               <PrepSection>
+              <NewContainer>
+                <Badge>Step2</Badge>
+                <ContentText>팀 배정 정보를 보며, 플래버들에게 조끼를 나눠주세요.</ContentText>
+              </NewContainer>
+              <SubText>필요시에 로테이션표와 팀 재배정 기능을 활용하세요</SubText>
                 <PrepTitleContainer>
-                  <PrepSubTitle>• 팀 정보</PrepSubTitle>
-                  <ButtonGroup>
-                    <RotationButton>로테이션 표</RotationButton>
+                  <ButtonGroup style={{justifyContent: 'flex-end', marginBottom: '8px'}}>
+                    <RotationButton onClick={handleRotation}>로테이션 표</RotationButton>
                     <ReassignButton onClick={handleTeamReassign}>팀 재배정</ReassignButton>
                   </ButtonGroup>
                 </PrepTitleContainer>
                 <TeamGrid>
                   {teamAssignments.map((team, index) => (
                     <TeamCard key={index} isBlue={index === 0}>
-                      <TeamTitleContainer>
-                        <TeamTitle isBlue={index === 0}>
-                          {team.teamName}
-                        </TeamTitle>
-                        <PlayerCount>{team.players.length}명</PlayerCount>
-                      </TeamTitleContainer>
+                      <TeamIcon>
+                        <img 
+                          src={index === 0 ? blueTeamVest : redTeamVest} 
+                          alt={`${team.teamName} 아이콘`}
+                          style={{ width: '60px', height: '60px' }}
+                        />
+                      </TeamIcon>
+                      <TeamInfo>
+                        <TeamName>{team.teamName}</TeamName>
+                        <PlayerCount>세미프로1 {team.players.length}/8명</PlayerCount>
+                      </TeamInfo>
                       <PlayerList>
                         {team.players.map((player, idx) => (
                           <PlayerItem key={idx}>
-                            <PlayerName>{player.name}</PlayerName>
+                            <PlayerName>
+                              <PlayerNumber isBlue={index === 0}>{idx + 1}</PlayerNumber>
+                              {player.name}
+                            </PlayerName>
                             <PlayerLevel>{player.level}</PlayerLevel>
                           </PlayerItem>
                         ))}
@@ -248,15 +275,22 @@ const LeadFlaverProgress = () => {
             </PrepContainer>
           </Section>
           <Divider />
-
-          <Section>
-            <StartMatchButton onClick={handleMatchStart}>
-              매치 시작하기
-            </StartMatchButton>
-            <EndMatchButton onClick={handleEndMatch}>
-              매치 종료하기
-            </EndMatchButton>
-          </Section>
+          <Spacer />
+          <ButtonSection>
+            <NewContainer>
+              <Badge>Step3</Badge>
+              <ContentText>매치를 시작해주세요.</ContentText>
+            </NewContainer>
+            <SubText>매치 어시스턴스가 로테이션 및 진행을 도와줄거에요.</SubText>
+            <ButtonGroup>
+              <EndMatchButton onClick={handleEndMatch}>
+                매치 종료하기
+              </EndMatchButton>
+              <StartMatchButton onClick={handleMatchStart}>
+                매치 시작하기
+              </StartMatchButton>
+            </ButtonGroup>
+          </ButtonSection>
         </>
       ) : (
         <EmergencyGuide>
@@ -331,9 +365,12 @@ const LeadFlaverProgress = () => {
 };
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 475px;
+  width: 100%;
 `;
 
 const PageTitle = styled.h1`
@@ -341,109 +378,136 @@ const PageTitle = styled.h1`
   font-size: 24px;
   font-weight: bold;
   color: white;
-  width: 100%;
-  max-width: 520px;
+  width: calc(100% - 40px);
   padding: 15px 20px;
-  margin: 0 auto 30px;
-  margin-left: 20px;
-  background-color: #1E2B5E;
+  margin: 0 0 30px 0;
+  background-color: #282B33;
   border-radius: 8px;
 `;
 
 const TabContainer = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 40px;
   margin-bottom: 30px;
+  justify-content: flex-start;
   width: 100%;
-  max-width: 520px;
-  margin: 0 auto 30px;
-  padding: 0;
-  margin-left: 20px;
-  margin-right: auto;
 `;
 
-const Tab = styled.button<{ active: boolean }>`
-  flex: 1;
-  min-width: 280px;
-  padding: 20px 40px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+const Tab = styled.div<{ active: boolean }>`
+  font-size: 18px;
+  font-weight: ${props => props.active ? '600' : '400'};
+  color: ${props => props.active ? '#1570FF' : '#666'};
   cursor: pointer;
-  background-color: ${props => props.active ? '#1E2B5E' : '#f8f9fa'};
-  color: ${props => props.active ? 'white' : '#333'};
-  transition: all 0.2s;
+  padding: 8px 0;
+  position: relative;
+  transition: all 0.3s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: ${props => props.active ? '100%' : '0'};
+    height: 2px;
+    background-color: #1570FF;
+    transition: width 0.3s ease-in-out;
+  }
 
   &:hover {
-    background-color: ${props => props.active ? '#162044' : '#e9ecef'};
+    color: #1570FF;
   }
 `;
 
 const Section = styled.section`
   margin-bottom: 40px;
+  width: 100%;
 `;
 
 const SectionTitle = styled.h2`
   margin-bottom: 20px;
   font-size: 24px;
+  text-align: left;
 `;
 
 const InfoBox = styled.div`
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-`;
-
-const InfoList = styled.div`
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const InfoItem = styled.div`
-  font-size: 16px;
-  padding: 12px 20px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:first-child {  // 날짜와 시간을 포함하는 첫 번째 InfoItem
+    color: #333;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  &:last-child {  // 장소와 인원수를 포함하는 두 번째 InfoItem
+    font-size: 16px;
+    color: #333;
+  }
 `;
 
 const TeamGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: 20px;
+  justify-content: space-between;
 `;
 
 const TeamCard = styled.div<{ isBlue: boolean }>`
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-`;
-
-const TeamTitleContainer = styled.div`
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-bottom: 15px;
 `;
 
-const TeamTitle = styled.h3<{ isBlue: boolean }>`
-  margin: 0;
-  font-size: 20px;
-  color: white;
-  background-color: ${props => props.isBlue ? '#1E2B5E' : '#B23A48'};
-  padding: 8px 16px;
-  border-radius: 4px;
-  display: inline-block;
+const TeamIcon = styled.div`
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const TeamInfo = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+
+const TeamName = styled.div`
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 4px;
+`;
+
+const PlayerCount = styled.div`
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 15px;
 `;
 
 const PlayerList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 `;
 
 const PlayerItem = styled.li`
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #dee2e6;
   display: flex;
   justify-content: space-between;
@@ -457,6 +521,8 @@ const PlayerItem = styled.li`
 const PlayerName = styled.span`
   font-size: 16px;
   color: #333;
+  display: flex;
+  align-items: center;
 `;
 
 const PlayerLevel = styled.span`
@@ -464,28 +530,51 @@ const PlayerLevel = styled.span`
   color: #666;
 `;
 
-const StartMatchButton = styled.button`
+const ButtonSection = styled(Section)`
+  position: fixed;
+  bottom: 0;
+  left: 40px;
+  right: 0;
+  background-color: white;
+  padding: 16px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
   width: 100%;
-  padding: 30px;
-  font-size: 24px;
+  max-width: 475px;
+  margin: 0 auto;
+  box-sizing: border-box;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 8px; // 버튼 사이 간격
+  width: 100%;
+  margin-top: 10px;
+`;
+
+const StartMatchButton = styled.button`
+  box-sizing: border-box;
+  flex: 7; // 7:3 비율
+  padding: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: white;
-  background-color: #1E2B5E;
+  background-color: #1570FF;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-bottom: 10px;
 
   &:hover {
-    background-color: #162044;
+    background-color: #1259CC;
   }
 `;
 
 const EndMatchButton = styled.button`
-  width: 100%;
-  padding: 15px;
-  font-size: 24px;
+  box-sizing: border-box;
+  flex: 3; // 7:3 비율
+  padding: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: white;
   background-color: #B23A48;
@@ -556,12 +645,6 @@ const GuideContent = styled.p`
   margin: 0;
 `;
 
-const PlayerCount = styled.div`
-  color: #666;
-  font-size: 16px;
-  padding: 8px 0;
-`;
-
 const PrepContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -571,7 +654,7 @@ const PrepContainer = styled.div`
 const PrepSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  margin-top: 5px;
 `;
 
 const PrepSubTitle = styled.h3`
@@ -718,14 +801,14 @@ const ReportTextarea = styled.textarea`
 
 const SubmitButton = styled.button`
   padding: 10px 20px;
-  background-color: #1E2B5E;
+  background-color: #1570FF;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   
   &:hover {
-    background-color: #162044;
+    background-color: #1259CC;
   }
 `;
 
@@ -734,12 +817,6 @@ const Divider = styled.hr`
   border-top: 1px solid #dee2e6;
   margin: 0 auto 30px;
   width: 100%;
-  max-width: 1160px;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 10px;
 `;
 
 const RotationButton = styled.button`
@@ -757,4 +834,72 @@ const RotationButton = styled.button`
   }
 `;
 
-export default LeadFlaverProgress;
+const NewContainer = styled.div`
+  display: flex;
+  height: 40px;
+  width: 100%;
+  padding: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  background-color: #282B33;
+  box-sizing:border-box;
+`;
+
+const ContentText = styled.div`
+  color: var(--gray-white, #FFF);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+`;
+
+const Badge = styled.div`
+  display: flex;
+  height: 16px;
+  padding: 0px 4px;
+  justify-content: center;
+  align-items: center;
+  color: var(--gray-white, #FFF);
+  text-align: center;
+  border-radius: 4px;
+  background: var(--blue-blue500, #1570FF);
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+const SubText = styled.div`
+  color: #666;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  margin-top: 8px;
+`;
+
+const PlayerNumber = styled.span<{ isBlue: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: ${props => props.isBlue ? '#1570FF' : '#B23A48'};
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  margin-right: 8px;
+`;
+
+const Spacer = styled.div`
+  height: 140px; // ButtonSection의 대략적인 높이
+  width: 100%;
+`;
+
+export default LeadPlaberProgress;

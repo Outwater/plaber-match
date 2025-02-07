@@ -10,7 +10,7 @@ interface MatchInfo {
   participants: number;
 }
 
-type Level = '세미프로1' | '세미프로2' | '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5';
+type Level = '세미프로1' | '세미프로2' | '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5' | '비기너2' | '비기너3' | '루키';
 
 interface Player {
   name: string;
@@ -52,7 +52,7 @@ const LeadPlaberProgress = () => {
     date: '2024-03-22',
     time: '21:00',
     location: '플랩 스타디움 가산 마리오',
-    participants: 18
+    participants: 12
   });
 
   const [showReportModal, setShowReportModal] = useState(false);
@@ -63,7 +63,7 @@ const LeadPlaberProgress = () => {
   });
 
   const getRandomLevel = (): Level => {
-    const levels: Level[] = ['세미프로1', '세미프로2', '아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5'];
+    const levels: Level[] = ['세미프로1', '세미프로2', '아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5', '비기너2', '비기너3', '루키'];
     return levels[Math.floor(Math.random() * levels.length)] as Level;
   };
 
@@ -109,7 +109,10 @@ const LeadPlaberProgress = () => {
         '아마추어2': 4,
         '아마추어3': 3,
         '아마추어4': 2,
-        '아마추어5': 1
+        '아마추어5': 1,
+        '비기너2': 0.5,
+        '비기너3': 0.3,
+        '루키': 0.1
       };
       return levelToScore[b.level] - levelToScore[a.level];
     });
@@ -220,14 +223,12 @@ const LeadPlaberProgress = () => {
               <PrepSection>
                 <PrepList>
                   <PrepItem>
-                    <PrepIcon>🏟️</PrepIcon>
-                    <PrepText>구장 장비 위치 및 특이사항</PrepText>
                     <ViewButton 
                       href="https://plabfootball.notion.site/a29919ddda28405aabc434dc98afa703?pvs=4"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      보러가기
+                      구장 장비 위치 및 특이사항 보러가기
                     </ViewButton>
                   </PrepItem>
                 </PrepList>
@@ -238,7 +239,7 @@ const LeadPlaberProgress = () => {
                 <Badge>Step2</Badge>
                 <ContentText>팀 배정 정보를 보며, 플래버들에게 조끼를 나눠주세요.</ContentText>
               </NewContainer>
-              <SubText>필요시에 로테이션표와 팀 재배정 기능을 활용하세요</SubText>
+              <SubText>필요 시에 로테이션 표와 팀 재배정 기능을 활용하세요</SubText>
                 <PrepTitleContainer>
                   <ButtonGroup style={{justifyContent: 'flex-end', marginBottom: '8px'}}>
                     <RotationButton onClick={handleRotation}>로테이션 표</RotationButton>
@@ -257,7 +258,7 @@ const LeadPlaberProgress = () => {
                       </TeamIcon>
                       <TeamInfo>
                         <TeamName>{team.teamName}</TeamName>
-                        <PlayerCount>세미프로1 {team.players.length}/8명</PlayerCount>
+                        <PlayerCount>세미프로1 {team.players.length}/6명</PlayerCount>
                       </TeamInfo>
                       <PlayerList>
                         {team.players.map((player, idx) => (
@@ -530,7 +531,7 @@ const PlayerLevel = styled.span`
 const ButtonSection = styled(Section)`
   position: fixed;
   bottom: 0;
-  left: 40px;
+  left: 0;
   right: 0;
   background-color: white;
   padding: 16px;
@@ -663,18 +664,10 @@ const PrepList = styled.div`
 const PrepItem = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 15px;
-  background-color: #f8f9fa;
   padding: 15px 20px;
   border-radius: 8px;
-`;
-
-const PrepIcon = styled.span`
-  font-size: 24px;
-`;
-
-const PrepText = styled.span`
-  font-size: 16px;
 `;
 
 const PrepTitleContainer = styled.div`
@@ -707,7 +700,6 @@ const ViewButton = styled.a`
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  margin-left: auto;
   
   &:hover {
     background-color: #f8f9fa;

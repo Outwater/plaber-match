@@ -10,7 +10,7 @@ interface MatchInfo {
   participants: number;
 }
 
-type Level = '세미프로1' | '세미프로2' | '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5';
+type Level = '세미프로1' | '세미프로2' | '아마추어1' | '아마추어2' | '아마추어3' | '아마추어4' | '아마추어5' | '비기너2' | '비기너3' | '루키';
 
 interface Player {
   name: string;
@@ -52,7 +52,7 @@ const LeadPlaberProgress = () => {
     date: '2024-03-22',
     time: '21:00',
     location: '플랩 스타디움 가산 마리오',
-    participants: 18
+    participants: 12
   });
 
   const [showReportModal, setShowReportModal] = useState(false);
@@ -63,7 +63,7 @@ const LeadPlaberProgress = () => {
   });
 
   const getRandomLevel = (): Level => {
-    const levels: Level[] = ['세미프로1', '세미프로2', '아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5'];
+    const levels: Level[] = ['세미프로1', '세미프로2', '아마추어1', '아마추어2', '아마추어3', '아마추어4', '아마추어5', '비기너2', '비기너3', '루키'];
     return levels[Math.floor(Math.random() * levels.length)] as Level;
   };
 
@@ -109,7 +109,10 @@ const LeadPlaberProgress = () => {
         '아마추어2': 4,
         '아마추어3': 3,
         '아마추어4': 2,
-        '아마추어5': 1
+        '아마추어5': 1,
+        '비기너2': 0.5,
+        '비기너3': 0.3,
+        '루키': 0.1
       };
       return levelToScore[b.level] - levelToScore[a.level];
     });
@@ -220,14 +223,12 @@ const LeadPlaberProgress = () => {
               <PrepSection>
                 <PrepList>
                   <PrepItem>
-                    <PrepIcon>🏟️</PrepIcon>
-                    <PrepText>구장 장비 위치 및 특이사항</PrepText>
                     <ViewButton 
                       href="https://plabfootball.notion.site/a29919ddda28405aabc434dc98afa703?pvs=4"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      보러가기
+                      구장 장비 위치 및 특이사항 보러가기
                     </ViewButton>
                   </PrepItem>
                 </PrepList>
@@ -236,9 +237,9 @@ const LeadPlaberProgress = () => {
               <PrepSection>
               <NewContainer>
                 <Badge>Step2</Badge>
-                <ContentText>팀 배정 정보를 보며, 플래버들에게 조끼를 나눠주세요.</ContentText>
+                <ContentText>팀배정 정보를 보며, 플래버들에게 조끼를 나눠주세요.</ContentText>
               </NewContainer>
-              <SubText>필요시에 로테이션표와 팀 재배정 기능을 활용하세요</SubText>
+              <SubText>필요 시에 로테이션 표와 팀 재배정 기능을 활용하세요</SubText>
                 <PrepTitleContainer>
                   <ButtonGroup style={{justifyContent: 'flex-end', marginBottom: '8px'}}>
                     <RotationButton onClick={handleRotation}>로테이션 표</RotationButton>
@@ -257,7 +258,7 @@ const LeadPlaberProgress = () => {
                       </TeamIcon>
                       <TeamInfo>
                         <TeamName>{team.teamName}</TeamName>
-                        <PlayerCount>세미프로1 {team.players.length}/8명</PlayerCount>
+                        <PlayerCount>{team.teamName === '블루팀' ? '세미프로1' : '아마추어5'} {team.players.length}/6명</PlayerCount>
                       </TeamInfo>
                       <PlayerList>
                         {team.players.map((player, idx) => (
@@ -289,7 +290,7 @@ const LeadPlaberProgress = () => {
                 매치 시작하기
               </StartMatchButton>
               <EndMatchButton onClick={handleEndMatch}>
-                매치 종료하기
+                종료하기
               </EndMatchButton>
             </ButtonGroup>
           </ButtonSection>
@@ -373,6 +374,7 @@ const Container = styled.div`
   padding: 20px;
   max-width: 475px;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const PageTitle = styled.h1`
@@ -385,6 +387,7 @@ const PageTitle = styled.h1`
   margin: 0 0 30px 0;
   background-color: #282B33;
   border-radius: 8px;
+  font-family: Pretendard;
 `;
 
 const TabContainer = styled.div`
@@ -403,6 +406,7 @@ const Tab = styled.div<{ active: boolean }>`
   padding: 8px 0;
   position: relative;
   transition: all 0.3s;
+  font-family: Pretendard;
 
   &::after {
     content: '';
@@ -436,7 +440,7 @@ const InfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-
+  font-family: Pretendard;
   &:first-child {  // 날짜와 시간을 포함하는 첫 번째 InfoItem
     color: #333;
     font-family: Pretendard;
@@ -474,7 +478,6 @@ const TeamIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
 `;
 
 const TeamInfo = styled.div`
@@ -486,12 +489,15 @@ const TeamName = styled.div`
   font-size: 16px;
   color: #333;
   margin-bottom: 4px;
+  font-weight: 600;
+  font-family: Pretendard;
 `;
 
 const PlayerCount = styled.div`
   color: #666;
   font-size: 14px;
   margin-bottom: 15px;
+  font-family: Pretendard;
 `;
 
 const PlayerList = styled.ul`
@@ -520,17 +526,19 @@ const PlayerName = styled.span`
   color: #333;
   display: flex;
   align-items: center;
+  font-family: Pretendard;
 `;
 
 const PlayerLevel = styled.span`
   font-size: 14px;
   color: #666;
+  font-family: Pretendard;
 `;
 
 const ButtonSection = styled(Section)`
   position: fixed;
   bottom: 0;
-  left: 40px;
+  left: 0;
   right: 0;
   background-color: white;
   padding: 16px;
@@ -540,6 +548,7 @@ const ButtonSection = styled(Section)`
   max-width: 475px;
   margin: 0 auto;
   box-sizing: border-box;
+  font-family: Pretendard;
 `;
 
 const ButtonGroup = styled.div`
@@ -561,7 +570,7 @@ const StartMatchButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-
+  font-family: Pretendard;
   &:hover {
     background-color: #1259CC;
   }
@@ -579,7 +588,7 @@ const EndMatchButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-
+  font-family: Pretendard;
   &:hover {
     background-color: #8E2E3A;
   }
@@ -589,6 +598,7 @@ const EmergencyGuide = styled.div`
   padding: 0;
   max-width: 520px;
   margin: 0 auto;
+  font-family: Pretendard;
 `;
 
 const GuideList = styled.div`
@@ -596,6 +606,7 @@ const GuideList = styled.div`
   flex-direction: column;
   gap: 20px;
   width: 100%;
+  font-family: Pretendard;
 `;
 
 const GuideItem = styled.div`
@@ -663,18 +674,10 @@ const PrepList = styled.div`
 const PrepItem = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 15px;
-  background-color: #f8f9fa;
   padding: 15px 20px;
   border-radius: 8px;
-`;
-
-const PrepIcon = styled.span`
-  font-size: 24px;
-`;
-
-const PrepText = styled.span`
-  font-size: 16px;
 `;
 
 const PrepTitleContainer = styled.div`
@@ -692,7 +695,7 @@ const ReassignButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-
+  font-family: Pretendard;
   &:hover {
     background-color: #f8f9fa;
   }
@@ -707,8 +710,7 @@ const ViewButton = styled.a`
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  margin-left: auto;
-  
+  font-family: Pretendard;
   &:hover {
     background-color: #f8f9fa;
   }
@@ -734,6 +736,7 @@ const ModalContent = styled.div`
   max-height: 90vh;
   overflow-y: auto;
   margin: 0 auto;
+  font-family: Pretendard;
 `;
 
 const ModalHeader = styled.div`
@@ -836,6 +839,7 @@ const RotationButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: Pretendard;
 
   &:hover {
     background-color: #f8f9fa;
@@ -903,6 +907,7 @@ const PlayerNumber = styled.span<{ isBlue: boolean }>`
   border-radius: 50%;
   font-size: 12px;
   margin-right: 8px;
+  font-family: Pretendard;
 `;
 
 const Spacer = styled.div`

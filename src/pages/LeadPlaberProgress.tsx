@@ -237,7 +237,7 @@ const LeadPlaberProgress = () => {
               <PrepSection>
               <NewContainer>
                 <Badge>Step2</Badge>
-                <ContentText>팀 배정 정보를 보며, 플래버들에게 조끼를 나눠주세요.</ContentText>
+                <ContentText>팀배정 정보를 보며, 플래버들에게 조끼를 나눠주세요.</ContentText>
               </NewContainer>
               <SubText>필요 시에 로테이션 표와 팀 재배정 기능을 활용하세요</SubText>
                 <PrepTitleContainer>

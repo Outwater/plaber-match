@@ -258,7 +258,7 @@ const LeadPlaberProgress = () => {
                       </TeamIcon>
                       <TeamInfo>
                         <TeamName>{team.teamName}</TeamName>
-                        <PlayerCount>세미프로1 {team.players.length}/6명</PlayerCount>
+                        <PlayerCount>{team.teamName === '블루팀' ? '세미프로1' : '아마추어5'} {team.players.length}/6명</PlayerCount>
                       </TeamInfo>
                       <PlayerList>
                         {team.players.map((player, idx) => (
@@ -386,6 +386,7 @@ const PageTitle = styled.h1`
   margin: 0 0 30px 0;
   background-color: #282B33;
   border-radius: 8px;
+  font-family: Pretendard;
 `;
 
 const TabContainer = styled.div`
@@ -404,6 +405,7 @@ const Tab = styled.div<{ active: boolean }>`
   padding: 8px 0;
   position: relative;
   transition: all 0.3s;
+  font-family: Pretendard;
 
   &::after {
     content: '';
@@ -437,7 +439,7 @@ const InfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-
+  font-family: Pretendard;
   &:first-child {  // 날짜와 시간을 포함하는 첫 번째 InfoItem
     color: #333;
     font-family: Pretendard;
@@ -475,7 +477,6 @@ const TeamIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
 `;
 
 const TeamInfo = styled.div`
@@ -487,12 +488,15 @@ const TeamName = styled.div`
   font-size: 16px;
   color: #333;
   margin-bottom: 4px;
+  font-weight: 600;
+  font-family: Pretendard;
 `;
 
 const PlayerCount = styled.div`
   color: #666;
   font-size: 14px;
   margin-bottom: 15px;
+  font-family: Pretendard;
 `;
 
 const PlayerList = styled.ul`
@@ -521,11 +525,13 @@ const PlayerName = styled.span`
   color: #333;
   display: flex;
   align-items: center;
+  font-family: Pretendard;
 `;
 
 const PlayerLevel = styled.span`
   font-size: 14px;
   color: #666;
+  font-family: Pretendard;
 `;
 
 const ButtonSection = styled(Section)`
@@ -541,6 +547,7 @@ const ButtonSection = styled(Section)`
   max-width: 475px;
   margin: 0 auto;
   box-sizing: border-box;
+  font-family: Pretendard;
 `;
 
 const ButtonGroup = styled.div`
@@ -562,7 +569,7 @@ const StartMatchButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-
+  font-family: Pretendard;
   &:hover {
     background-color: #1259CC;
   }
@@ -580,7 +587,7 @@ const EndMatchButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-
+  font-family: Pretendard;
   &:hover {
     background-color: #8E2E3A;
   }
@@ -590,6 +597,7 @@ const EmergencyGuide = styled.div`
   padding: 0;
   max-width: 520px;
   margin: 0 auto;
+  font-family: Pretendard;
 `;
 
 const GuideList = styled.div`
@@ -597,6 +605,7 @@ const GuideList = styled.div`
   flex-direction: column;
   gap: 20px;
   width: 100%;
+  font-family: Pretendard;
 `;
 
 const GuideItem = styled.div`
@@ -685,7 +694,7 @@ const ReassignButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-
+  font-family: Pretendard;
   &:hover {
     background-color: #f8f9fa;
   }
@@ -700,7 +709,7 @@ const ViewButton = styled.a`
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  
+  font-family: Pretendard;
   &:hover {
     background-color: #f8f9fa;
   }
@@ -726,6 +735,7 @@ const ModalContent = styled.div`
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
+  font-family: Pretendard;
 `;
 
 const ModalHeader = styled.div`
@@ -811,7 +821,8 @@ const RotationButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-
+  font-family: Pretendard;
+  
   &:hover {
     background-color: #f8f9fa;
   }
@@ -878,6 +889,7 @@ const PlayerNumber = styled.span<{ isBlue: boolean }>`
   border-radius: 50%;
   font-size: 12px;
   margin-right: 8px;
+  font-family: Pretendard;
 `;
 
 const Spacer = styled.div`
